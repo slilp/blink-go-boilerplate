@@ -1,0 +1,345 @@
+definitions:
+  controllers.RegisterRequest:
+    properties:
+      avatar:
+        type: string
+      email:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      password:
+        minLength: 5
+        type: string
+      phone:
+        type: string
+      role:
+        allOf:
+        - $ref: '#/definitions/models.RoleType'
+        default: USER
+      username:
+        type: string
+    required:
+    - email
+    - password
+    - username
+    type: object
+  controllers.SignInRequest:
+    properties:
+      password:
+        example: admin1234
+        minLength: 5
+        type: string
+      username:
+        example: admin@email.com
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  controllers.createOrderRequest:
+    type: object
+  controllers.createProductRequest:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      pic:
+        type: string
+      price:
+        minimum: 0
+        type: number
+      sku:
+        type: string
+    required:
+    - name
+    - sku
+    type: object
+  controllers.updateOrderStatusRequest:
+    properties:
+      status:
+        $ref: '#/definitions/models.OrderStatus'
+    required:
+    - status
+    type: object
+  controllers.updateProductRequest:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      pic:
+        type: string
+      price:
+        minimum: 0
+        type: number
+      sku:
+        type: string
+    type: object
+  models.OrderStatus:
+    enum:
+    - DRAFTED
+    - PROCESSING
+    - DELIVERING
+    - REJECTED
+    - COMPLETED
+    type: string
+    x-enum-varnames:
+    - DRAFTED
+    - PROCESSING
+    - DELIVERING
+    - REJECTED
+    - COMPLETED
+  models.RoleType:
+    enum:
+    - USER
+    - ADMIN
+    type: string
+    x-enum-varnames:
+    - USER
+    - ADMIN
+info:
+  contact:
+    name: Contact
+    url: https://www.blink-me-code.dev/portfolio
+  title: Blink GO(Gin) Boilerplate
+  version: 1.0.0
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      operationId: Login
+      parameters:
+      - description: ''''''
+        in: body
+        name: Login
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.SignInRequest'
+      produces:
+      - application/json
+      responses: {}
+      summary: Login
+      tags:
+      - auth
+  /auth/refresh:
+    get:
+      operationId: Refresh token
+      produces:
+      - text/plain
+      responses: {}
+      security:
+      - BearerAuth: []
+      summary: Refresh token
+      tags:
+      - auth
+  /health-check:
+    get:
+      description: Health checking for the service
+      operationId: HealthCheck
+      produces:
+      - text/plain
+      responses: {}
+      summary: Health Check
+      tags:
+      - health-check
+  /order:
+    post:
+      consumes:
+      - application/json
+      operationId: Create order
+      parameters:
+      - description: ''''''
+        in: body
+        name: Order
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.createOrderRequest'
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - BearerAuth: []
+      summary: Create order
+      tags:
+      - order
+  /order/{id}:
+    delete:
+      operationId: Delete order
+      parameters:
+      - description: id of order
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - text/plain
+      responses: {}
+      security:
+      - BearerAuth: []
+      summary: Delete order
+      tags:
+      - order
+    get:
+      operationId: Order by ID
+      parameters:
+      - description: id of order
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses: {}
+      security:
+      - BearerAuth: []
+      summary: Order by ID
+      tags:
+      - order
+    patch:
+      consumes:
+      - application/json
+      operationId: Update order
+      parameters:
+      - description: id of order
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: ''''''
+        in: body
+        name: Product
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.createOrderRequest'
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - BearerAuth: []
+      summary: Update order
+      tags:
+      - produorderct
+  /order/order-status/{id}:
+    patch:
+      consumes:
+      - application/json
+      operationId: Update order status
+      parameters:
+      - description: id of order
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: ''''''
+        in: body
+        name: Order
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.updateOrderStatusRequest'
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - BearerAuth: []
+      summary: Update order status
+      tags:
+      - order
+  /product:
+    post:
+      consumes:
+      - application/json
+      operationId: Create product
+      parameters:
+      - description: ''''''
+        in: body
+        name: Product
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.createProductRequest'
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - BearerAuth: []
+      summary: Create product
+      tags:
+      - product
+  /product/{id}:
+    delete:
+      operationId: Delete product
+      parameters:
+      - description: id of product
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - text/plain
+      responses: {}
+      security:
+      - BearerAuth: []
+      summary: Delete product
+      tags:
+      - product
+    get:
+      operationId: Product by ID
+      parameters:
+      - description: id of product
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses: {}
+      summary: Product by ID
+      tags:
+      - product
+    put:
+      consumes:
+      - application/json
+      operationId: Update product
+      parameters:
+      - description: id of product
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: ''''''
+        in: body
+        name: Product
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.updateProductRequest'
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - BearerAuth: []
+      summary: Update product
+      tags:
+      - product
+  /user/register:
+    post:
+      consumes:
+      - application/json
+      operationId: Register
+      parameters:
+      - description: ''''''
+        in: body
+        name: User
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.RegisterRequest'
+      produces:
+      - application/json
+      responses: {}
+      summary: Register
+      tags:
+      - user
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

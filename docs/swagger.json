@@ -1,0 +1,524 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Blink GO(Gin) Boilerplate",
+        "contact": {
+            "name": "Contact",
+            "url": "https://www.blink-me-code.dev/portfolio"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/auth/login": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Login",
+                "operationId": "Login",
+                "parameters": [
+                    {
+                        "description": "''",
+                        "name": "Login",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.SignInRequest"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/auth/refresh": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Refresh token",
+                "operationId": "Refresh token",
+                "responses": {}
+            }
+        },
+        "/health-check": {
+            "get": {
+                "description": "Health checking for the service",
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "health-check"
+                ],
+                "summary": "Health Check",
+                "operationId": "HealthCheck",
+                "responses": {}
+            }
+        },
+        "/order": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "order"
+                ],
+                "summary": "Create order",
+                "operationId": "Create order",
+                "parameters": [
+                    {
+                        "description": "''",
+                        "name": "Order",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.createOrderRequest"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/order/order-status/{id}": {
+            "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "order"
+                ],
+                "summary": "Update order status",
+                "operationId": "Update order status",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id of order",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "''",
+                        "name": "Order",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.updateOrderStatusRequest"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/order/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "order"
+                ],
+                "summary": "Order by ID",
+                "operationId": "Order by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id of order",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "order"
+                ],
+                "summary": "Delete order",
+                "operationId": "Delete order",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id of order",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            },
+            "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "produorderct"
+                ],
+                "summary": "Update order",
+                "operationId": "Update order",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id of order",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "''",
+                        "name": "Product",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.createOrderRequest"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/product": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product"
+                ],
+                "summary": "Create product",
+                "operationId": "Create product",
+                "parameters": [
+                    {
+                        "description": "''",
+                        "name": "Product",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.createProductRequest"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/product/{id}": {
+            "get": {
+                "tags": [
+                    "product"
+                ],
+                "summary": "Product by ID",
+                "operationId": "Product by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id of product",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            },
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product"
+                ],
+                "summary": "Update product",
+                "operationId": "Update product",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id of product",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "''",
+                        "name": "Product",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.updateProductRequest"
+                        }
+                    }
+                ],
+                "responses": {}
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "product"
+                ],
+                "summary": "Delete product",
+                "operationId": "Delete product",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id of product",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/user/register": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Register",
+                "operationId": "Register",
+                "parameters": [
+                    {
+                        "description": "''",
+                        "name": "User",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.RegisterRequest"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        }
+    },
+    "definitions": {
+        "controllers.RegisterRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "password",
+                "username"
+            ],
+            "properties": {
+                "avatar": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string",
+                    "minLength": 5
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "role": {
+                    "default": "USER",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/models.RoleType"
+                        }
+                    ]
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "controllers.SignInRequest": {
+            "type": "object",
+            "required": [
+                "password",
+                "username"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string",
+                    "minLength": 5,
+                    "example": "admin1234"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "admin@email.com"
+                }
+            }
+        },
+        "controllers.createOrderRequest": {
+            "type": "object"
+        },
+        "controllers.createProductRequest": {
+            "type": "object",
+            "required": [
+                "name",
+                "sku"
+            ],
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "pic": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "sku": {
+                    "type": "string"
+                }
+            }
+        },
+        "controllers.updateOrderStatusRequest": {
+            "type": "object",
+            "required": [
+                "status"
+            ],
+            "properties": {
+                "status": {
+                    "$ref": "#/definitions/models.OrderStatus"
+                }
+            }
+        },
+        "controllers.updateProductRequest": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "pic": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "sku": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.OrderStatus": {
+            "type": "string",
+            "enum": [
+                "DRAFTED",
+                "PROCESSING",
+                "DELIVERING",
+                "REJECTED",
+                "COMPLETED"
+            ],
+            "x-enum-varnames": [
+                "DRAFTED",
+                "PROCESSING",
+                "DELIVERING",
+                "REJECTED",
+                "COMPLETED"
+            ]
+        },
+        "models.RoleType": {
+            "type": "string",
+            "enum": [
+                "USER",
+                "ADMIN"
+            ],
+            "x-enum-varnames": [
+                "USER",
+                "ADMIN"
+            ]
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}
