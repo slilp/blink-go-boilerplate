@@ -63,3 +63,5 @@ func (UserEntity) TableName() string {
     return "users"
 }
 
+
+

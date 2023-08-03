@@ -200,7 +200,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "produorderct"
+                    "order"
                 ],
                 "summary": "Update order",
                 "operationId": "Update order",
@@ -214,7 +214,7 @@
                     },
                     {
                         "description": "''",
-                        "name": "Product",
+                        "name": "Order",
                         "in": "body",
                         "required": true,
                         "schema": {

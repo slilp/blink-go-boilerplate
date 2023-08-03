@@ -3,6 +3,7 @@ package controllers
 import (
 	"blink-go-gin-boilerplate/middleware"
 	"blink-go-gin-boilerplate/models"
+	"blink-go-gin-boilerplate/utils/e"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -41,13 +42,13 @@ type User struct {
 func (u *User) Register(ctx *gin.Context) {
 	var form RegisterRequest
 	if err := ctx.ShouldBindJSON(&form); err != nil {
-		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": e.ERROR_INVALID_REQUEST})
 		return
 	}
 
 	var checkUser models.UserEntity
 	if check := u.DB.First(&checkUser,"username = ?", form.Username); check.RowsAffected != 0 {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Duplicate"})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": e.ERROR_ALREADY_USED_USER})
 		return
 	}
 
@@ -57,7 +58,7 @@ func (u *User) Register(ctx *gin.Context) {
 
 	user.Password = user.GenerateEncryptedPassword()
 	if err := u.DB.Create(&user).Error; err != nil {
-		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": e.ERROR_CREATE_USER})
 		return
 	}
 
@@ -77,18 +78,18 @@ func (u *User) Register(ctx *gin.Context) {
 func (u *User) SignIn(ctx *gin.Context) {
 	var form SignInRequest
 	if err := ctx.ShouldBindJSON(&form); err != nil {
-		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": e.ERROR_INVALID_REQUEST})
 		return
 	}
 
 	var user models.UserEntity
 	if check := u.DB.First(&user,"username = ?", form.Username); check.RowsAffected == 0 {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Not found username password"})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": e.ERROR_USERNAME_PASSWORD})
 		return
 	}
 
 	if checkPassword := user.ValidateEncryptedPassword(form.Password); !checkPassword {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Not found username password"})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": e.ERROR_USERNAME_PASSWORD})
 		return
 	}
 

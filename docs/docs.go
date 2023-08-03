@@ -210,7 +210,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "produorderct"
+                    "order"
                 ],
                 "summary": "Update order",
                 "operationId": "Update order",
@@ -224,7 +224,7 @@ const docTemplate = `{
                     },
                     {
                         "description": "''",
-                        "name": "Product",
+                        "name": "Order",
                         "in": "body",
                         "required": true,
                         "schema": {

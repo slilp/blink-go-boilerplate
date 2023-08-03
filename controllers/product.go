@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"blink-go-gin-boilerplate/models"
+	"blink-go-gin-boilerplate/utils/e"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -39,7 +40,7 @@ type Product struct {
 func (p *Product) FindOne(ctx *gin.Context) {
 	product, err := p.FindById(ctx)
 	if err != nil {
-		ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusNotFound, gin.H{"error": e.ERROR_NOT_FOUND_PRODUCT})
 		return
 	}
 	ctx.JSON(http.StatusOK, product)
@@ -57,7 +58,7 @@ func (p *Product) FindOne(ctx *gin.Context) {
 func (p *Product) Create(ctx *gin.Context) {
 	var form createProductRequest
 	if err := ctx.ShouldBind(&form); err != nil {
-		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": e.ERROR_INVALID_REQUEST})
 		return
 	}
 
@@ -65,7 +66,7 @@ func (p *Product) Create(ctx *gin.Context) {
 	copier.Copy(&product, &form)
 
 	if err := p.DB.Create(&product).Error; err != nil {
-		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error":e.ERROR_CREATE_PRODUCT})
 		return
 	}
 
@@ -85,20 +86,20 @@ func (p *Product) Create(ctx *gin.Context) {
 func (p *Product) Update(ctx *gin.Context) {
 	var form updateProductRequest
 	if err := ctx.ShouldBind(&form); err != nil {
-		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": e.ERROR_INVALID_REQUEST})
 		return
 	}
 
 	product , err := p.FindById(ctx)
 	if err != nil {
-		ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusNotFound, gin.H{"error": e.ERROR_NOT_FOUND_PRODUCT})
 		return
 	}
 
 	copier.Copy(&product, &form)
 
 	if err := p.DB.Save(&product).Error; err != nil {
-		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": e.ERROR_UPDATE_PRODUCT})
 		return
 	}
 
@@ -116,7 +117,7 @@ func (p *Product) Update(ctx *gin.Context) {
 func (p *Product) Delete(ctx *gin.Context) {
 	product , err := p.FindById(ctx)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Not found"})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": e.ERROR_NOT_FOUND_PRODUCT})
 		return
 	}
 

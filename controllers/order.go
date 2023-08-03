@@ -3,6 +3,7 @@ package controllers
 import (
 	"blink-go-gin-boilerplate/middleware"
 	"blink-go-gin-boilerplate/models"
+	"blink-go-gin-boilerplate/utils/e"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -34,11 +35,11 @@ func (o *Order) FindOne(ctx *gin.Context) {
 	order, err := o.FindWithRelationById(ctx)
 	user := middleware.ExtractUserToken(ctx)
 	if err != nil {
-		ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusNotFound, gin.H{"error": e.ERROR_NOT_FOUND_ORDER})
 		return
 	}
 	if order.UserID != user.ID {
-		ctx.JSON(http.StatusNotFound, gin.H{"error": "not found data"})
+		ctx.JSON(http.StatusNotFound, gin.H{"error": e.ERROR_NOT_FOUND_ORDER})
 		return
 	}
 	ctx.JSON(http.StatusOK, order)
@@ -56,12 +57,12 @@ func (o *Order) FindOne(ctx *gin.Context) {
 func (o *Order) Create(ctx *gin.Context) {
 	var form createOrderRequest
 	if err := ctx.ShouldBind(&form); err != nil {
-		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": e.ERROR_INVALID_REQUEST})
 		return
 	}
 
 	if len(form.Products) == 0 {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Bad request"})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": e.ERROR_INVALID_REQUEST})
 		return
 	}
 
@@ -72,7 +73,7 @@ func (o *Order) Create(ctx *gin.Context) {
 	order.Products = form.Products
 
 	if err := o.DB.Create(&order).Error; err != nil {
-		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": e.ERROR_CREATE_ORDER})
 		return
 	}
 
@@ -96,20 +97,20 @@ func (o *Order) Create(ctx *gin.Context) {
 func (o *Order) UpdateStatus(ctx *gin.Context) {
 	var form updateOrderStatusRequest
 	if err := ctx.ShouldBind(&form); err != nil {
-		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": e.ERROR_INVALID_REQUEST})
 		return
 	}
 
 	order , err := o.FindWithRelationById(ctx)
 	if err != nil {
-		ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusNotFound, gin.H{"error": e.ERROR_NOT_FOUND_ORDER})
 		return
 	}
 
 	order.Status = form.Status
 
 	if err := o.DB.Save(&order).Error; err != nil {
-		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": e.ERROR_UPDATE_ORDER})
 		return
 	}
 
@@ -118,37 +119,37 @@ func (o *Order) UpdateStatus(ctx *gin.Context) {
 
 // Update order godoc
 // @summary Update order
-// @tags produorderct
+// @tags order
 // @id Update order
 // @accept json
 // @produce json
 // @param id path int true "id of order"
-// @param Product body createOrderRequest true "''"
+// @param Order body createOrderRequest true "''"
 // @security BearerAuth
 // @router /order/{id} [patch]
 func (o *Order) Update(ctx *gin.Context) {
 	var form createOrderRequest
 	if err := ctx.ShouldBind(&form); err != nil {
-		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": e.ERROR_INVALID_REQUEST})
 		return
 	}
 
 	order , err := o.FindById(ctx)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Not found"})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": e.ERROR_NOT_FOUND_ORDER})
 		return
 	}
 
 	user := middleware.ExtractUserToken(ctx)
 	if order.UserID != user.ID {
-		ctx.JSON(http.StatusNotFound, gin.H{"error": "not found data"})
+		ctx.JSON(http.StatusNotFound, gin.H{"error": e.ERROR_NOT_FOUND_ORDER})
 		return
 	}
 
 	order.Products = form.Products
 
 	if err := o.DB.Model(&order).Association("Products").Replace(order.Products); err != nil {
-		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": e.ERROR_UPDATE_ORDER})
 		return
 	}
 
@@ -169,17 +170,17 @@ func (o *Order) Update(ctx *gin.Context) {
 func (o *Order) Delete(ctx *gin.Context) {
 	order , err := o.FindById(ctx)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Not found"})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": e.ERROR_NOT_FOUND_ORDER})
 		return
 	}
 
 	user := middleware.ExtractUserToken(ctx)
 	if order.UserID != user.ID {
-		ctx.JSON(http.StatusNotFound, gin.H{"error": "not found data"})
+		ctx.JSON(http.StatusNotFound, gin.H{"error": e.ERROR_NOT_FOUND_ORDER})
 		return
 	}
 
-	o.DB.Unscoped().Delete(&order)
+	o.DB.Delete(&order)
 	ctx.Status(http.StatusNoContent)
 }
 

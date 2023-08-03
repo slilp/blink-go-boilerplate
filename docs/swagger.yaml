@@ -209,7 +209,7 @@ paths:
         type: integer
       - description: ''''''
         in: body
-        name: Product
+        name: Order
         required: true
         schema:
           $ref: '#/definitions/controllers.createOrderRequest'
@@ -220,7 +220,7 @@ paths:
       - BearerAuth: []
       summary: Update order
       tags:
-      - produorderct
+      - order
   /order/order-status/{id}:
     patch:
       consumes:

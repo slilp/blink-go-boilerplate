@@ -9,6 +9,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
+	"golang.org/x/exp/slices"
 )
 
 func AuthorizedUser(roles  []models.RoleType) gin.HandlerFunc {
@@ -22,10 +23,11 @@ func AuthorizedUser(roles  []models.RoleType) gin.HandlerFunc {
 
 		token := strings.TrimPrefix(headerToken, "Bearer ")
 		var user models.UserEntity
-		if err := validateToken(token,&user); err != nil {
+		if err := validateToken(token,&user); err != nil || !slices.Contains(roles, user.Role){
 			c.AbortWithStatus(http.StatusUnauthorized)
 			return
 		}
+
 		c.Set("user", user)
 
 	}
