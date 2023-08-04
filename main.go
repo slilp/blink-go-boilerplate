@@ -26,10 +26,14 @@ import (
 // @name Authorization
 
 func main(){
-	err := godotenv.Load()
-	if err != nil{
-		log.Fatal("Error environment config")
+	isDeployment := os.Getenv("IS_DEPLOYMENT")
+	if isDeployment == ""{
+		err := godotenv.Load()
+		if err != nil{
+			log.Fatal("Error environment config")
+		}
 	}
+	
 
 	db := config.InitDB()
 	migration.Migrate(db)
