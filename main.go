@@ -5,7 +5,6 @@ import (
 	"blink-go-gin-boilerplate/migration"
 	"blink-go-gin-boilerplate/routes"
 	"log"
-	"net/http"
 	"os"
 
 	_ "blink-go-gin-boilerplate/docs"
@@ -26,10 +25,6 @@ import (
 // @in header
 // @name Authorization
 
-var (
-	app *gin.Engine
-)
-
 func main(){
 	err := godotenv.Load()
 	if err != nil{
@@ -38,15 +33,16 @@ func main(){
 
 	db := config.InitDB()
 	migration.Migrate(db)
-	app := gin.Default()
-	app.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	r := gin.Default()
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	routes.Serve(app,db)
+	routes.Serve(r,db)
 
-	app.Run(":"+os.Getenv("PORT"))
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
 
-}
+	r.Run(":"+port)
 
-func Handler(w http.ResponseWriter, r *http.Request){
-	app.ServeHTTP(w,r)
 }
