@@ -39,7 +39,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllers.SignInRequest"
+                            "$ref": "#/definitions/user.SignInRequest"
                         }
                     }
                 ],
@@ -61,20 +61,6 @@ const docTemplate = `{
                 ],
                 "summary": "Refresh token",
                 "operationId": "Refresh token",
-                "responses": {}
-            }
-        },
-        "/health-check": {
-            "get": {
-                "description": "Health checking for the service",
-                "produces": [
-                    "text/plain"
-                ],
-                "tags": [
-                    "health-check"
-                ],
-                "summary": "Health Check",
-                "operationId": "HealthCheck",
                 "responses": {}
             }
         },
@@ -103,7 +89,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllers.createOrderRequest"
+                            "$ref": "#/definitions/order.CreateOrderRequest"
                         }
                     }
                 ],
@@ -142,7 +128,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllers.updateOrderStatusRequest"
+                            "$ref": "#/definitions/order.UpdateOrderStatusRequest"
                         }
                     }
                 ],
@@ -228,7 +214,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllers.createOrderRequest"
+                            "$ref": "#/definitions/order.CreateOrderRequest"
                         }
                     }
                 ],
@@ -260,7 +246,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllers.createProductRequest"
+                            "$ref": "#/definitions/product.CreateProductRequest"
                         }
                     }
                 ],
@@ -316,7 +302,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllers.updateProductRequest"
+                            "$ref": "#/definitions/product.UpdateProductRequest"
                         }
                     }
                 ],
@@ -368,7 +354,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllers.RegisterRequest"
+                            "$ref": "#/definitions/user.RegisterRequest"
                         }
                     }
                 ],
@@ -377,7 +363,84 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "controllers.RegisterRequest": {
+        "order.CreateOrderRequest": {
+            "type": "object"
+        },
+        "order.OrderStatus": {
+            "type": "string",
+            "enum": [
+                "DRAFTED",
+                "PROCESSING",
+                "DELIVERING",
+                "REJECTED",
+                "COMPLETED"
+            ],
+            "x-enum-varnames": [
+                "DRAFTED",
+                "PROCESSING",
+                "DELIVERING",
+                "REJECTED",
+                "COMPLETED"
+            ]
+        },
+        "order.UpdateOrderStatusRequest": {
+            "type": "object",
+            "required": [
+                "status"
+            ],
+            "properties": {
+                "status": {
+                    "$ref": "#/definitions/order.OrderStatus"
+                }
+            }
+        },
+        "product.CreateProductRequest": {
+            "type": "object",
+            "required": [
+                "name",
+                "sku"
+            ],
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "pic": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "sku": {
+                    "type": "string"
+                }
+            }
+        },
+        "product.UpdateProductRequest": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "pic": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "sku": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.RegisterRequest": {
             "type": "object",
             "required": [
                 "email",
@@ -408,7 +471,7 @@ const docTemplate = `{
                     "default": "USER",
                     "allOf": [
                         {
-                            "$ref": "#/definitions/models.RoleType"
+                            "$ref": "#/definitions/utils.RoleType"
                         }
                     ]
                 },
@@ -417,7 +480,7 @@ const docTemplate = `{
                 }
             }
         },
-        "controllers.SignInRequest": {
+        "user.SignInRequest": {
             "type": "object",
             "required": [
                 "password",
@@ -435,84 +498,7 @@ const docTemplate = `{
                 }
             }
         },
-        "controllers.createOrderRequest": {
-            "type": "object"
-        },
-        "controllers.createProductRequest": {
-            "type": "object",
-            "required": [
-                "name",
-                "sku"
-            ],
-            "properties": {
-                "description": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "pic": {
-                    "type": "string"
-                },
-                "price": {
-                    "type": "number",
-                    "minimum": 0
-                },
-                "sku": {
-                    "type": "string"
-                }
-            }
-        },
-        "controllers.updateOrderStatusRequest": {
-            "type": "object",
-            "required": [
-                "status"
-            ],
-            "properties": {
-                "status": {
-                    "$ref": "#/definitions/models.OrderStatus"
-                }
-            }
-        },
-        "controllers.updateProductRequest": {
-            "type": "object",
-            "properties": {
-                "description": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "pic": {
-                    "type": "string"
-                },
-                "price": {
-                    "type": "number",
-                    "minimum": 0
-                },
-                "sku": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.OrderStatus": {
-            "type": "string",
-            "enum": [
-                "DRAFTED",
-                "PROCESSING",
-                "DELIVERING",
-                "REJECTED",
-                "COMPLETED"
-            ],
-            "x-enum-varnames": [
-                "DRAFTED",
-                "PROCESSING",
-                "DELIVERING",
-                "REJECTED",
-                "COMPLETED"
-            ]
-        },
-        "models.RoleType": {
+        "utils.RoleType": {
             "type": "string",
             "enum": [
                 "USER",
@@ -535,7 +521,7 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "1.0.0",
+	Version:          "2.0.0",
 	Host:             "",
 	BasePath:         "",
 	Schemes:          []string{},

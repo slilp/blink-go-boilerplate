@@ -6,7 +6,7 @@
             "name": "Contact",
             "url": "https://www.blink-me-code.dev/portfolio"
         },
-        "version": "1.0.0"
+        "version": "2.0.0"
     },
     "paths": {
         "/auth/login": {
@@ -29,7 +29,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllers.SignInRequest"
+                            "$ref": "#/definitions/user.SignInRequest"
                         }
                     }
                 ],
@@ -51,20 +51,6 @@
                 ],
                 "summary": "Refresh token",
                 "operationId": "Refresh token",
-                "responses": {}
-            }
-        },
-        "/health-check": {
-            "get": {
-                "description": "Health checking for the service",
-                "produces": [
-                    "text/plain"
-                ],
-                "tags": [
-                    "health-check"
-                ],
-                "summary": "Health Check",
-                "operationId": "HealthCheck",
                 "responses": {}
             }
         },
@@ -93,7 +79,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllers.createOrderRequest"
+                            "$ref": "#/definitions/order.CreateOrderRequest"
                         }
                     }
                 ],
@@ -132,7 +118,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllers.updateOrderStatusRequest"
+                            "$ref": "#/definitions/order.UpdateOrderStatusRequest"
                         }
                     }
                 ],
@@ -218,7 +204,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllers.createOrderRequest"
+                            "$ref": "#/definitions/order.CreateOrderRequest"
                         }
                     }
                 ],
@@ -250,7 +236,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllers.createProductRequest"
+                            "$ref": "#/definitions/product.CreateProductRequest"
                         }
                     }
                 ],
@@ -306,7 +292,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllers.updateProductRequest"
+                            "$ref": "#/definitions/product.UpdateProductRequest"
                         }
                     }
                 ],
@@ -358,7 +344,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllers.RegisterRequest"
+                            "$ref": "#/definitions/user.RegisterRequest"
                         }
                     }
                 ],
@@ -367,7 +353,84 @@
         }
     },
     "definitions": {
-        "controllers.RegisterRequest": {
+        "order.CreateOrderRequest": {
+            "type": "object"
+        },
+        "order.OrderStatus": {
+            "type": "string",
+            "enum": [
+                "DRAFTED",
+                "PROCESSING",
+                "DELIVERING",
+                "REJECTED",
+                "COMPLETED"
+            ],
+            "x-enum-varnames": [
+                "DRAFTED",
+                "PROCESSING",
+                "DELIVERING",
+                "REJECTED",
+                "COMPLETED"
+            ]
+        },
+        "order.UpdateOrderStatusRequest": {
+            "type": "object",
+            "required": [
+                "status"
+            ],
+            "properties": {
+                "status": {
+                    "$ref": "#/definitions/order.OrderStatus"
+                }
+            }
+        },
+        "product.CreateProductRequest": {
+            "type": "object",
+            "required": [
+                "name",
+                "sku"
+            ],
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "pic": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "sku": {
+                    "type": "string"
+                }
+            }
+        },
+        "product.UpdateProductRequest": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "pic": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "sku": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.RegisterRequest": {
             "type": "object",
             "required": [
                 "email",
@@ -398,7 +461,7 @@
                     "default": "USER",
                     "allOf": [
                         {
-                            "$ref": "#/definitions/models.RoleType"
+                            "$ref": "#/definitions/utils.RoleType"
                         }
                     ]
                 },
@@ -407,7 +470,7 @@
                 }
             }
         },
-        "controllers.SignInRequest": {
+        "user.SignInRequest": {
             "type": "object",
             "required": [
                 "password",
@@ -425,84 +488,7 @@
                 }
             }
         },
-        "controllers.createOrderRequest": {
-            "type": "object"
-        },
-        "controllers.createProductRequest": {
-            "type": "object",
-            "required": [
-                "name",
-                "sku"
-            ],
-            "properties": {
-                "description": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "pic": {
-                    "type": "string"
-                },
-                "price": {
-                    "type": "number",
-                    "minimum": 0
-                },
-                "sku": {
-                    "type": "string"
-                }
-            }
-        },
-        "controllers.updateOrderStatusRequest": {
-            "type": "object",
-            "required": [
-                "status"
-            ],
-            "properties": {
-                "status": {
-                    "$ref": "#/definitions/models.OrderStatus"
-                }
-            }
-        },
-        "controllers.updateProductRequest": {
-            "type": "object",
-            "properties": {
-                "description": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "pic": {
-                    "type": "string"
-                },
-                "price": {
-                    "type": "number",
-                    "minimum": 0
-                },
-                "sku": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.OrderStatus": {
-            "type": "string",
-            "enum": [
-                "DRAFTED",
-                "PROCESSING",
-                "DELIVERING",
-                "REJECTED",
-                "COMPLETED"
-            ],
-            "x-enum-varnames": [
-                "DRAFTED",
-                "PROCESSING",
-                "DELIVERING",
-                "REJECTED",
-                "COMPLETED"
-            ]
-        },
-        "models.RoleType": {
+        "utils.RoleType": {
             "type": "string",
             "enum": [
                 "USER",

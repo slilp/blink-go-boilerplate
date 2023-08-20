@@ -1,46 +1,28 @@
 definitions:
-  controllers.RegisterRequest:
+  order.CreateOrderRequest:
+    type: object
+  order.OrderStatus:
+    enum:
+    - DRAFTED
+    - PROCESSING
+    - DELIVERING
+    - REJECTED
+    - COMPLETED
+    type: string
+    x-enum-varnames:
+    - DRAFTED
+    - PROCESSING
+    - DELIVERING
+    - REJECTED
+    - COMPLETED
+  order.UpdateOrderStatusRequest:
     properties:
-      avatar:
-        type: string
-      email:
-        type: string
-      firstName:
-        type: string
-      lastName:
-        type: string
-      password:
-        minLength: 5
-        type: string
-      phone:
-        type: string
-      role:
-        allOf:
-        - $ref: '#/definitions/models.RoleType'
-        default: USER
-      username:
-        type: string
+      status:
+        $ref: '#/definitions/order.OrderStatus'
     required:
-    - email
-    - password
-    - username
+    - status
     type: object
-  controllers.SignInRequest:
-    properties:
-      password:
-        example: admin1234
-        minLength: 5
-        type: string
-      username:
-        example: admin@email.com
-        type: string
-    required:
-    - password
-    - username
-    type: object
-  controllers.createOrderRequest:
-    type: object
-  controllers.createProductRequest:
+  product.CreateProductRequest:
     properties:
       description:
         type: string
@@ -57,14 +39,7 @@ definitions:
     - name
     - sku
     type: object
-  controllers.updateOrderStatusRequest:
-    properties:
-      status:
-        $ref: '#/definitions/models.OrderStatus'
-    required:
-    - status
-    type: object
-  controllers.updateProductRequest:
+  product.UpdateProductRequest:
     properties:
       description:
         type: string
@@ -78,21 +53,46 @@ definitions:
       sku:
         type: string
     type: object
-  models.OrderStatus:
-    enum:
-    - DRAFTED
-    - PROCESSING
-    - DELIVERING
-    - REJECTED
-    - COMPLETED
-    type: string
-    x-enum-varnames:
-    - DRAFTED
-    - PROCESSING
-    - DELIVERING
-    - REJECTED
-    - COMPLETED
-  models.RoleType:
+  user.RegisterRequest:
+    properties:
+      avatar:
+        type: string
+      email:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      password:
+        minLength: 5
+        type: string
+      phone:
+        type: string
+      role:
+        allOf:
+        - $ref: '#/definitions/utils.RoleType'
+        default: USER
+      username:
+        type: string
+    required:
+    - email
+    - password
+    - username
+    type: object
+  user.SignInRequest:
+    properties:
+      password:
+        example: admin1234
+        minLength: 5
+        type: string
+      username:
+        example: admin@email.com
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  utils.RoleType:
     enum:
     - USER
     - ADMIN
@@ -105,7 +105,7 @@ info:
     name: Contact
     url: https://www.blink-me-code.dev/portfolio
   title: Blink GO(Gin) Boilerplate
-  version: 1.0.0
+  version: 2.0.0
 paths:
   /auth/login:
     post:
@@ -118,7 +118,7 @@ paths:
         name: Login
         required: true
         schema:
-          $ref: '#/definitions/controllers.SignInRequest'
+          $ref: '#/definitions/user.SignInRequest'
       produces:
       - application/json
       responses: {}
@@ -136,16 +136,6 @@ paths:
       summary: Refresh token
       tags:
       - auth
-  /health-check:
-    get:
-      description: Health checking for the service
-      operationId: HealthCheck
-      produces:
-      - text/plain
-      responses: {}
-      summary: Health Check
-      tags:
-      - health-check
   /order:
     post:
       consumes:
@@ -157,7 +147,7 @@ paths:
         name: Order
         required: true
         schema:
-          $ref: '#/definitions/controllers.createOrderRequest'
+          $ref: '#/definitions/order.CreateOrderRequest'
       produces:
       - application/json
       responses: {}
@@ -212,7 +202,7 @@ paths:
         name: Order
         required: true
         schema:
-          $ref: '#/definitions/controllers.createOrderRequest'
+          $ref: '#/definitions/order.CreateOrderRequest'
       produces:
       - application/json
       responses: {}
@@ -237,7 +227,7 @@ paths:
         name: Order
         required: true
         schema:
-          $ref: '#/definitions/controllers.updateOrderStatusRequest'
+          $ref: '#/definitions/order.UpdateOrderStatusRequest'
       produces:
       - application/json
       responses: {}
@@ -257,7 +247,7 @@ paths:
         name: Product
         required: true
         schema:
-          $ref: '#/definitions/controllers.createProductRequest'
+          $ref: '#/definitions/product.CreateProductRequest'
       produces:
       - application/json
       responses: {}
@@ -310,7 +300,7 @@ paths:
         name: Product
         required: true
         schema:
-          $ref: '#/definitions/controllers.updateProductRequest'
+          $ref: '#/definitions/product.UpdateProductRequest'
       produces:
       - application/json
       responses: {}
@@ -330,7 +320,7 @@ paths:
         name: User
         required: true
         schema:
-          $ref: '#/definitions/controllers.RegisterRequest'
+          $ref: '#/definitions/user.RegisterRequest'
       produces:
       - application/json
       responses: {}

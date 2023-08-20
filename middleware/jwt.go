@@ -1,18 +1,16 @@
 package middleware
 
 import (
-	"blink-go-gin-boilerplate/models"
-	"encoding/json"
+	user "blink-go-gin-boilerplate/app/user/api"
+	"blink-go-gin-boilerplate/utils"
 	"net/http"
-	"os"
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/exp/slices"
 )
 
-func AuthorizedUser(roles  []models.RoleType) gin.HandlerFunc {
+func AuthorizedUser(roles  []utils.RoleType) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		headerToken := c.Request.Header.Get("Authorization")
 		
@@ -22,8 +20,8 @@ func AuthorizedUser(roles  []models.RoleType) gin.HandlerFunc {
 		}
 
 		token := strings.TrimPrefix(headerToken, "Bearer ")
-		var user models.UserEntity
-		if err := validateToken(token,&user); err != nil || !slices.Contains(roles, user.Role){
+		var user user.UserEntity		
+		if err := utils.ValidateToken(token,&user); err != nil || !slices.Contains(roles, user.Role){
 			c.AbortWithStatus(http.StatusUnauthorized)
 			return
 		}
@@ -43,8 +41,8 @@ func RefreshUser() gin.HandlerFunc {
 		}
 
 		token := strings.TrimPrefix(headerToken, "Bearer ")
-		var user models.UserEntity
-		if err := validateRefreshToken(token,&user); err != nil {
+		var user user.UserEntity		
+		if err := utils.ValidateRefreshToken(token,&user); err != nil {
 			c.AbortWithStatus(http.StatusUnauthorized)
 			return
 		}
@@ -54,46 +52,7 @@ func RefreshUser() gin.HandlerFunc {
 }
 
 
-func validateToken(token string,user *models.UserEntity) error {
-	claims := jwt.MapClaims{}
-	 _  , err := jwt.ParseWithClaims(token,claims, func(t *jwt.Token) (interface{}, error) {
-        return []byte(os.Getenv("JWT_SECRET_KEY")), nil
-    })
 
-	if err != nil{
-		return err
-	}
-	
-	for key, val := range claims {
-		if key == "sub"{
-			 json.Unmarshal([]byte(val.(string)), user)
-		}
-	}
-
-	return nil
-
-}
-
-func validateRefreshToken(token string,user *models.UserEntity) error {
-	claims := jwt.MapClaims{}
-	 _  , err := jwt.ParseWithClaims(token,claims, func(t *jwt.Token) (interface{}, error) {
-        return []byte(os.Getenv("REFRESH_JWT_SECRET_KEY")), nil
-    })
-
-	if err != nil{
-		return err
-	}
-	
-	for key, val := range claims {
-		if key == "sub"{
-			 json.Unmarshal([]byte(val.(string)), user)
-		}
-	}
-
-	return nil
-
-}
-
-func ExtractUserToken(ctx *gin.Context) models.UserEntity {
-	return ctx.MustGet("user").(models.UserEntity)
+func ExtractUserToken(ctx *gin.Context) user.UserEntity {
+	return ctx.MustGet("user").(user.UserEntity)
 }
