@@ -11,8 +11,9 @@ type Config struct {
 }
 
 func (c *Config) generateDSN() string {
-	dsn := fmt.Sprintf("host=%s user=%s password=%s database=%s port=%s sslmode=disable",
+	dsn := fmt.Sprintf("host=%s user=%s password=%s database=%s port=%s sslmode=require",
 		c.PostgresHost, c.PostgresUser, c.PostgresPassword, c.PostgresDB, c.PostgresPort)
 
 	return dsn
 }
+
