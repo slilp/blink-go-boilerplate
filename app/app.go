@@ -34,7 +34,7 @@ func Initialize() {
 
 	router := InitGin(*config)
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	router.GET("/health", func(c *gin.Context) {
+	router.GET("/health-check", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 		  "message": "health check",
 		})
