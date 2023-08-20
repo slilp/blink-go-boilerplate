@@ -25,8 +25,6 @@ import (
 var server *http.Server
 var router *gin.Engine
 
-
-
 func Initialize() {
 	config, err := loadConfig()
 
@@ -36,6 +34,11 @@ func Initialize() {
 
 	router := InitGin(*config)
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	router.GET("/health", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+		  "message": "health check",
+		})
+	  })
 
 	db, err := database.Initialize(config.Database)
 	if err != nil {
