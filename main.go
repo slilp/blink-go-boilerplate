@@ -1,6 +1,6 @@
 package main
 
-import "blink-go-gin-boilerplate/app"
+import "github.com/slilp/blink-go-boilerplate/app"
 
 // @title           Blink GO(Gin) Boilerplate
 // @version         2.0.0

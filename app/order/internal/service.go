@@ -1,7 +1,7 @@
 package internal
 
 import (
-	order "blink-go-gin-boilerplate/app/order/api"
+	order "github.com/slilp/blink-go-boilerplate/app/order/api"
 )
 
 

@@ -1,10 +1,11 @@
 package server
 
 import (
-	product "blink-go-gin-boilerplate/app/product/api"
-	"blink-go-gin-boilerplate/middleware"
-	"blink-go-gin-boilerplate/utils"
 	"net/http"
+
+	product "github.com/slilp/blink-go-boilerplate/app/product/api"
+	"github.com/slilp/blink-go-boilerplate/middleware"
+	"github.com/slilp/blink-go-boilerplate/utils"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"

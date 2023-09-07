@@ -1,10 +1,11 @@
 package database
 
 import (
-	"blink-go-gin-boilerplate/migration"
 	"log"
 	"os"
 	"time"
+
+	"github.com/slilp/blink-go-boilerplate/migration"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

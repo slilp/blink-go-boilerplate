@@ -1,9 +1,9 @@
 package product
 
 import (
-	product "blink-go-gin-boilerplate/app/product/api"
-	"blink-go-gin-boilerplate/app/product/internal"
-	"blink-go-gin-boilerplate/app/product/server"
+	product "github.com/slilp/blink-go-boilerplate/app/product/api"
+	"github.com/slilp/blink-go-boilerplate/app/product/internal"
+	"github.com/slilp/blink-go-boilerplate/app/product/server"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"

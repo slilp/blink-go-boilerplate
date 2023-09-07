@@ -1,10 +1,6 @@
 package app
 
 import (
-	"blink-go-gin-boilerplate/app/order"
-	"blink-go-gin-boilerplate/app/product"
-	user "blink-go-gin-boilerplate/app/user"
-	"blink-go-gin-boilerplate/database"
 	"context"
 	"errors"
 	"fmt"
@@ -15,7 +11,12 @@ import (
 	"syscall"
 	"time"
 
-	_ "blink-go-gin-boilerplate/docs"
+	"github.com/slilp/blink-go-boilerplate/app/order"
+	"github.com/slilp/blink-go-boilerplate/app/product"
+	user "github.com/slilp/blink-go-boilerplate/app/user"
+	"github.com/slilp/blink-go-boilerplate/database"
+
+	_ "github.com/slilp/blink-go-boilerplate/docs"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"

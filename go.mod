@@ -1,4 +1,4 @@
-module blink-go-gin-boilerplate
+module github.com/slilp/blink-go-boilerplate
 
 go 1.19
 

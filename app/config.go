@@ -1,8 +1,9 @@
 package app
 
 import (
-	"blink-go-gin-boilerplate/database"
 	"time"
+
+	"github.com/slilp/blink-go-boilerplate/database"
 
 	"github.com/kelseyhightower/envconfig"
 )

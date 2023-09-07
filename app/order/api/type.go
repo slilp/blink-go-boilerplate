@@ -1,7 +1,7 @@
 package order
 
 import (
-	product "blink-go-gin-boilerplate/app/product/api"
+	product "github.com/slilp/blink-go-boilerplate/app/product/api"
 
 	"gorm.io/gorm"
 )

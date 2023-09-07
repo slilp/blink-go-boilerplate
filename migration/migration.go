@@ -1,9 +1,9 @@
 package migration
 
 import (
-	order "blink-go-gin-boilerplate/app/order/api"
-	product "blink-go-gin-boilerplate/app/product/api"
-	user "blink-go-gin-boilerplate/app/user/api"
+	order "github.com/slilp/blink-go-boilerplate/app/order/api"
+	product "github.com/slilp/blink-go-boilerplate/app/product/api"
+	user "github.com/slilp/blink-go-boilerplate/app/user/api"
 
 	"gorm.io/gorm"
 )

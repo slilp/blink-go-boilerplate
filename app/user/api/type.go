@@ -1,8 +1,8 @@
 package user
 
 import (
-	order "blink-go-gin-boilerplate/app/order/api"
-	"blink-go-gin-boilerplate/utils"
+	order "github.com/slilp/blink-go-boilerplate/app/order/api"
+	"github.com/slilp/blink-go-boilerplate/utils"
 
 	"gorm.io/gorm"
 )

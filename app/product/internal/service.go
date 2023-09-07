@@ -1,6 +1,6 @@
 package internal
 
-import product "blink-go-gin-boilerplate/app/product/api"
+import product "github.com/slilp/blink-go-boilerplate/app/product/api"
 
 
 func NewService(repo product.Repository) product.Service {

@@ -1,9 +1,9 @@
 package order
 
 import (
-	order "blink-go-gin-boilerplate/app/order/api"
-	"blink-go-gin-boilerplate/app/order/internal"
-	"blink-go-gin-boilerplate/app/order/server"
+	order "github.com/slilp/blink-go-boilerplate/app/order/api"
+	"github.com/slilp/blink-go-boilerplate/app/order/internal"
+	"github.com/slilp/blink-go-boilerplate/app/order/server"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"

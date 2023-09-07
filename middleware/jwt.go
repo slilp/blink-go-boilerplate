@@ -1,10 +1,11 @@
 package middleware
 
 import (
-	user "blink-go-gin-boilerplate/app/user/api"
-	"blink-go-gin-boilerplate/utils"
 	"net/http"
 	"strings"
+
+	user "github.com/slilp/blink-go-boilerplate/app/user/api"
+	"github.com/slilp/blink-go-boilerplate/utils"
 
 	"github.com/gin-gonic/gin"
 	"golang.org/x/exp/slices"

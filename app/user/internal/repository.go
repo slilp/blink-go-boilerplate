@@ -1,7 +1,7 @@
 package internal
 
 import (
-	user "blink-go-gin-boilerplate/app/user/api"
+	user "github.com/slilp/blink-go-boilerplate/app/user/api"
 
 	"gorm.io/gorm"
 )
